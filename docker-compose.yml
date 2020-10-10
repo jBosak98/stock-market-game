@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:11-alpine
+    env_file: .env
+  backend:
+    build:
+      context: ./stock-market-game-backend
+      dockerfile: Dockerfile.backend
+    ports:
+       - "8080:8080"
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ./stock-market-game-frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
