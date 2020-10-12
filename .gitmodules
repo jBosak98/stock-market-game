@@ -1,6 +1,6 @@
 [submodule "stock-market-game-frontend"]
 	path = stock-market-game-frontend
-	url = https://github.com/jBosak98/stock-market-game-frontend
+	url = git@github.com:jBosak98/stock-market-game-frontend.git
 [submodule "stock-market-game-backend"]
 	path = stock-market-game-backend
 	url = git@github.com:jBosak98/stock-market-game-backend.git
