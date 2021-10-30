@@ -4,3 +4,6 @@
 [submodule "stock-market-game-backend"]
 	path = stock-market-game-backend
 	url = git@github.com:jBosak98/stock-market-game-backend.git
+[submodule "jbs"]
+	path = jbs
+	url = https://gitlab.com/244973/jbs.git

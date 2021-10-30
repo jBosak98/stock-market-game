@@ -21,9 +21,30 @@ services:
       dockerfile: Dockerfile.prod
     expose:
       - "80"
-        #    depends_on:
-        #      - backend
-
+  rabbitmq:
+    build: ./jbs/rabbitmq
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbitmq_management load_definitions "/tmp/rabbit.definitions.json"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    restart: on-failure:5
+  data_fetcher:
+    build: ./jbs/data_fetcher
+    container_name: 'data_fetcher'
+    environment:
+      - DEBUG=True
+      - FETCHER_SLEEP=900
+      - FETCH_FROM=2021-10-20 21:56:00
+      - RB_HOST=rabbitmq
+      - RB_PORT=5672
+      - RB_USER=guest
+      - RB_PASSWORD=guest
+      - RB_QUEUE=TickerData
+    restart: on-failure:5
+    depends_on:
+      - rabbitmq
   nginx:
     image: nginx:latest
     volumes:
