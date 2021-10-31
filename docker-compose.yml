@@ -6,6 +6,7 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
   backend:
+    env_file: .env
     container_name: "backend"
     build:
       context: ./stock-market-game-backend
@@ -26,7 +27,7 @@ services:
     container_name: rabbitmq
     environment:
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbitmq_management load_definitions "/tmp/rabbit.definitions.json"
-    ports:
+    expose:
       - 5672:5672
       - 15672:15672
     restart: on-failure:5
@@ -51,7 +52,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/error.log:/etc/nginx/error_log.log
       - ./nginx/cache/:/etc/nginx/cache
-      - /etc/letsencrypt/:/etc/letsencrypt/
+#      - /etc/letsencrypt/:/etc/letsencrypt/
     ports:
       - "80:80"
       - "443:443"
