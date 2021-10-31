@@ -10,7 +10,6 @@ services:
     container_name: "backend"
     build:
       context: ./stock-market-game-backend
-      dockerfile: Dockerfile.backend
     expose:
        - "8080"
     depends_on:
@@ -28,8 +27,8 @@ services:
     environment:
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbitmq_management load_definitions "/tmp/rabbit.definitions.json"
     expose:
-      - 5672:5672
-      - 15672:15672
+      - "5672"
+      - "15672"
     restart: on-failure:5
   data_fetcher:
     build: ./jbs/data_fetcher
