@@ -31,7 +31,9 @@ services:
       - "15672"
     restart: on-failure:5
   data_fetcher:
-    build: ./jbs/data_fetcher
+    build: 
+      context: ./jbs/data_services
+      dockerfile: Dockerfile.df
     container_name: 'data_fetcher'
     environment:
       - DEBUG=True
@@ -42,9 +44,20 @@ services:
       - RB_USER=guest
       - RB_PASSWORD=guest
       - RB_QUEUE=TickerData
-    restart: on-failure:5
+    restart: on-failure:10
     depends_on:
       - rabbitmq
+  info_provider:
+    build:
+      context: ./jbs/data_services
+      dockerfile: Dockerfile.ip
+    container_name: 'info_provider'
+    environment:
+      - DEBUG=True
+      - INFOPRO_PORT=8050
+    restart: on-failure:10
+    expose: 
+      - "8050"
   nginx:
     image: nginx:latest
     volumes:
