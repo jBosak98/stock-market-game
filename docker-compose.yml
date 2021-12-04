@@ -11,7 +11,7 @@ services:
     build:
       context: ./stock-market-game-backend
     expose:
-       - "8080"
+      - "8080"
     depends_on:
       - db
   frontend:
@@ -35,15 +35,7 @@ services:
       context: ./jbs/data_services
       dockerfile: Dockerfile.df
     container_name: 'data_fetcher'
-    environment:
-      - DEBUG=True
-      - FETCHER_SLEEP=900
-      - FETCH_FROM=2021-10-20 21:56:00
-      - RB_HOST=rabbitmq
-      - RB_PORT=5672
-      - RB_USER=guest
-      - RB_PASSWORD=guest
-      - RB_QUEUE=TickerData
+    env_file: .env
     restart: on-failure:10
     depends_on:
       - rabbitmq
@@ -71,3 +63,20 @@ services:
     depends_on:
       - frontend
       - backend 
+  redis:
+    image: redis:6.2.6-alpine
+    command: redis-server --requirepass
+    container_name: redis
+    expose:
+      - "6379"
+
+  stock_analysis:
+    build: 
+      context: ./jbs/stock_analysis
+      dockerfile: Dockerfile
+    container_name: stock_analysis
+    env_file: .env
+    restart: always
+    depends_on:
+      - redis
+      - rabbitmq
